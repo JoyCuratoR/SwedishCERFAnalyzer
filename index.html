@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swedish CERF Level Analyzer</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            margin: 1rem 0;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        button:hover {
+            background-color: #0052a3;
+        }
+        #results {
+            margin-top: 1rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .level-indicator {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        .level-box {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .inactive {
+            background-color: #f0f0f0;
+            color: #666;
+        }
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .metric-card {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Swedish CERF Level Analyzer</h1>
+        <p>Paste your Swedish text below to analyze its CERF level:</p>
+        <textarea id="inputText" placeholder="Enter Swedish text here..."></textarea>
+        <button onclick="analyzeText()">Analyze Text</button>
+        <div id="results" style="display: none;">
+            <h2>Analysis Results</h2>
+            <div class="level-indicator">
+                <div class="level-box" id="a1">A1</div>
+                <div class="level-box" id="a2">A2</div>
+                <div class="level-box" id="b1">B1</div>
+                <div class="level-box" id="b2">B2</div>
+                <div class="level-box" id="c1">C1</div>
+                <div class="level-box" id="c2">C2</div>
+            </div>
+            <div class="metrics">
+                <div class="metric-card">
+                    <h3>Word Count</h3>
+                    <p id="wordCount">-</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Unique Words</h3>
+                    <p id="uniqueWords">-</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Average Word Length</h3>
+                    <p id="avgWordLength">-</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Sentence Count</h3>
+                    <p id="sentenceCount">-</p>
+                </div>
+            </div>
+            <div id="detailedAnalysis"></div>
+        </div>
+    </div>
+
+    <script>
+        // Simplified Swedish word frequency lists by CERF level
+        const wordLevels = {
+            A1: new Set(['jag', 'är', 'du', 'han', 'hon', 'det', 'en', 'ett', 'och', 'eller', 'men', 
+                        'hej', 'tack', 'ja', 'nej', 'mat', 'vatten', 'bil', 'hus', 'dag', 'natt']),
+            A2: new Set(['mycket', 'lite', 'stor', 'liten', 'god', 'dålig', 'varm', 'kall', 
+                        'snabb', 'långsam', 'börja', 'sluta', 'gå', 'komma', 'se', 'höra']),
+            B1: new Set(['eftersom', 'därför', 'medan', 'dessutom', 'förutom', 'enligt', 
+                        'utveckla', 'förklara', 'beskriva', 'påverka', 'förbättra']),
+            B2: new Set(['angelägen', 'betydande', 'omfattande', 'väsentlig', 'följaktligen',
+                        'sålunda', 'emellertid', 'dock', 'nämligen', 'förmodligen']),
+        };
+
+        function analyzeText() {
+            const text = document.getElementById('inputText').value.toLowerCase();
+            const words = text.match(/\b\w+\b/g) || [];
+            const uniqueWords = new Set(words);
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+
+            // Calculate basic metrics
+            const wordCount = words.length;
+            const avgWordLength = (words.join('').length / wordCount).toFixed(1);
+
+            // Count words at each level
+            const levelCounts = {
+                A1: 0, A2: 0, B1: 0, B2: 0
+            };
+
+            words.forEach(word => {
+                if (wordLevels.A1.has(word)) levelCounts.A1++;
+                else if (wordLevels.A2.has(word)) levelCounts.A2++;
+                else if (wordLevels.B1.has(word)) levelCounts.B1++;
+                else if (wordLevels.B2.has(word)) levelCounts.B2++;
+            });
+
+            // Determine CERF level based on word distribution
+            let cerfLevel = 'A1';
+            const wordPercentages = {
+                A1: (levelCounts.A1 / wordCount) * 100,
+                A2: (levelCounts.A2 / wordCount) * 100,
+                B1: (levelCounts.B1 / wordCount) * 100,
+                B2: (levelCounts.B2 / wordCount) * 100
+            };
+
+            if (wordPercentages.B2 > 5) cerfLevel = 'C1';
+            else if (wordPercentages.B1 > 10) cerfLevel = 'B2';
+            else if (wordPercentages.A2 > 15) cerfLevel = 'B1';
+            else if (wordPercentages.A1 > 20) cerfLevel = 'A2';
+
+            // Update UI
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('wordCount').textContent = wordCount;
+            document.getElementById('uniqueWords').textContent = uniqueWords.size;
+            document.getElementById('avgWordLength').textContent = avgWordLength;
+            document.getElementById('sentenceCount').textContent = sentences.length;
+
+            // Update level indicators
+            ['a1', 'a2', 'b1', 'b2', 'c1', 'c2'].forEach(level => {
+                const element = document.getElementById(level);
+                element.className = 'level-box ' + 
+                    (level.toUpperCase() === cerfLevel ? 'active' : 'inactive');
+            });
+
+            // Show detailed analysis
+            const detailedHTML = `
+                <h3>Detailed Analysis</h3>
+                <p>This text appears to be at CERF level ${cerfLevel}.</p>
+                <p>Word distribution:</p>
+                <ul>
+                    <li>A1 words: ${levelCounts.A1} (${wordPercentages.A1.toFixed(1)}%)</li>
+                    <li>A2 words: ${levelCounts.A2} (${wordPercentages.A2.toFixed(1)}%)</li>
+                    <li>B1 words: ${levelCounts.B1} (${wordPercentages.B1.toFixed(1)}%)</li>
+                    <li>B2 words: ${levelCounts.B2} (${wordPercentages.B2.toFixed(1)}%)</li>
+                </ul>
+            `;
+            document.getElementById('detailedAnalysis').innerHTML = detailedHTML;
+        }
+    </script>
+</body>
+</html>
