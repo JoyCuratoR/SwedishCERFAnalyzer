@@ -6,7 +6,7 @@ This app allows you to input any text that you're using to learn to read Swedish
 
 Here's a detailed explanation of how the analyzer works.
 
-<b>Word Lists Organization:</b>
+<b>Word Lists Organization</b>
 ```
 A1: ~50 most basic words (pronouns, basic verbs, numbers, essential nouns)
 
@@ -18,14 +18,44 @@ B2: ~30 sophisticated words (technical terms, formal expressions, complex verbs)
 ```
 
 
-<b>Analysis Process:</b>
-The analyzer uses multiple metrics to determine the CERF level:
-a. Word Level Distribution:
+<b>Analysis Process</b>
+The analyzer uses multiple metrics to determine the CERF level
 
-Counts how many words appear in each CERF level list
-Calculates percentages of words at each level
+<b>a. Word Level Distribution</b>
 
-<b>b. Sentence Complexity:</b>
+- Counts how many words appear in each CERF level list
+
+- Calculates percentages of words at each level
+
+<b>b. Sentence Complexity</b>
+
+- Average sentence length
+
+- Lexical diversity (unique words divided by total words)
+
+<b>Additional Metrics Displayed:</b>
+
+Word count
+
+Unique words
+
+Average word length
+
+Sentence count
+
+Average sentence length
+
+Lexical diversity
+
+Word distribution percentages
+
+Average sentence length
+Lexical diversity (unique words divided by total words)
+
+
+<b>Level Determination Algorithm</b>
+
+The text is classified based on these thresholds:
 
 ```
 C1: B2 words > 5% OR (avg sentence length > 20 AND lexical diversity > 0.7)
@@ -40,20 +70,3 @@ A1: Default level if no other criteria are met
 
 ```
 
-
-<b>Additional Metrics Displayed:</b>
-
-Word count
-Unique words
-Average word length
-Sentence count
-Average sentence length
-Lexical diversity
-Word distribution percentages
-
-Average sentence length
-Lexical diversity (unique words divided by total words)
-
-
-<b>Level Determination Algorithm:</b>
-The text is classified based on these thresholds:
