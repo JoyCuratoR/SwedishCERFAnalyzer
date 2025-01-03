@@ -35,22 +35,23 @@ The analyzer uses multiple metrics to determine the CERF level
 
 <b>Additional Metrics Displayed:</b>
 
-Word count
+- Word count
 
-Unique words
+- Unique words
 
-Average word length
+- Average word length
 
-Sentence count
+- Sentence count
 
-Average sentence length
+- Average sentence length
 
-Lexical diversity
+- Lexical diversity
 
-Word distribution percentages
+- Word distribution percentages
 
-Average sentence length
-Lexical diversity (unique words divided by total words)
+- Average sentence length
+
+- Lexical diversity (unique words divided by total words)
 
 
 <b>Level Determination Algorithm</b>
