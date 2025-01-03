@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Previous head and style sections remain the same -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Swedish CERF Level Analyzer</title>
     <style>
-        /* Previous styles remain the same */
         body {
             font-family: system-ui, -apple-system, sans-serif;
             max-width: 800px;
@@ -79,7 +77,6 @@
     </style>
 </head>
 <body>
-    <!-- Previous HTML structure remains the same -->
     <div class="container">
         <h1>Swedish CERF Level Analyzer</h1>
         <p>Paste your Swedish text below to analyze its CERF level:</p>
@@ -118,68 +115,16 @@
     </div>
 
     <script>
-        // Expanded Swedish word frequency lists by CERF level
+        // Simplified Swedish word frequency lists by CERF level
         const wordLevels = {
-            A1: new Set([
-                // Basic pronouns
-                'jag', 'du', 'han', 'hon', 'det', 'vi', 'ni', 'de', 'den', 'denna', 'detta',
-                // Basic verbs
-                'är', 'var', 'har', 'hade', 'kan', 'vill', 'ska', 'måste', 'gillar', 'tycker',
-                // Numbers
-                'ett', 'två', 'tre', 'fyra', 'fem', 'sex', 'sju', 'åtta', 'nio', 'tio',
-                // Basic nouns
-                'mat', 'vatten', 'bil', 'hus', 'dag', 'natt', 'morgon', 'kväll', 'år', 'tid',
-                'namn', 'familj', 'vän', 'skola', 'jobb', 'hem',
-                // Basic adjectives
-                'bra', 'dålig', 'stor', 'liten', 'ny', 'gammal', 'varm', 'kall',
-                // Common words
-                'ja', 'nej', 'tack', 'hej', 'och', 'eller', 'men', 'i', 'på', 'till', 'från'
-            ]),
-            
-            A2: new Set([
-                // Intermediate verbs
-                'börjar', 'slutar', 'pratar', 'lyssnar', 'skriver', 'läser', 'arbetar', 'studerar',
-                'köper', 'säljer', 'hjälper', 'behöver', 'tänker', 'förstår', 'glömmer',
-                // Time expressions
-                'igår', 'idag', 'imorgon', 'sedan', 'snart', 'alltid', 'aldrig', 'ibland',
-                // Descriptive adjectives
-                'trevlig', 'rolig', 'intressant', 'viktig', 'svår', 'lätt', 'vänlig', 'arg',
-                'trött', 'hungrig', 'stark', 'svag',
-                // Common nouns
-                'problem', 'lösning', 'fråga', 'svar', 'möte', 'resa', 'fest', 'present',
-                'väder', 'årstid', 'sommar', 'vinter', 'höst', 'vår',
-                // Prepositions and conjunctions
-                'under', 'över', 'mellan', 'framför', 'bakom', 'eftersom', 'när', 'om'
-            ]),
-            
-            B1: new Set([
-                // Advanced verbs
-                'utvecklar', 'förklarar', 'beskriver', 'påverkar', 'förbättrar', 'analyserar',
-                'diskuterar', 'presenterar', 'rekommenderar', 'jämför', 'planerar',
-                // Abstract nouns
-                'möjlighet', 'svårighet', 'förändring', 'utveckling', 'skillnad', 'betydelse',
-                'erfarenhet', 'kunskap', 'ansvar', 'relation', 'situation', 'miljö',
-                // Academic/Professional terms
-                'utbildning', 'forskning', 'projekt', 'rapport', 'resultat', 'analys',
-                'metod', 'process', 'system', 'struktur', 'funktion', 'kvalitet',
-                // Complex conjunctions
-                'dessutom', 'däremot', 'samtidigt', 'följaktligen', 'nämligen', 'dock'
-            ]),
-            
-            B2: new Set([
-                // Sophisticated verbs
-                'implementerar', 'koordinerar', 'evaluerar', 'initierar', 'faciliterar',
-                'konceptualiserar', 'differentierar', 'kategoriserar', 'systematiserar',
-                // Academic/Technical terms
-                'paradigm', 'perspektiv', 'teoretisk', 'empirisk', 'metodologi', 'hypotes',
-                'premiss', 'konklusion', 'implikation', 'korrelation', 'kausalitet',
-                // Complex adjectives
-                'substantiell', 'marginell', 'implicit', 'explicit', 'komplex', 'abstrakt',
-                'konkret', 'relativ', 'absolut', 'preliminär', 'definitiv',
-                // Formal expressions
-                'följaktligen', 'således', 'härmed', 'beträffande', 'angående', 'avseende',
-                'oaktat', 'ehuru', 'såtillvida'
-            ])
+            A1: new Set(['jag', 'är', 'du', 'han', 'hon', 'det', 'en', 'ett', 'och', 'eller', 'men', 
+                        'hej', 'tack', 'ja', 'nej', 'mat', 'vatten', 'bil', 'hus', 'dag', 'natt']),
+            A2: new Set(['mycket', 'lite', 'stor', 'liten', 'god', 'dålig', 'varm', 'kall', 
+                        'snabb', 'långsam', 'börja', 'sluta', 'gå', 'komma', 'se', 'höra']),
+            B1: new Set(['eftersom', 'därför', 'medan', 'dessutom', 'förutom', 'enligt', 
+                        'utveckla', 'förklara', 'beskriva', 'påverka', 'förbättra']),
+            B2: new Set(['angelägen', 'betydande', 'omfattande', 'väsentlig', 'följaktligen',
+                        'sålunda', 'emellertid', 'dock', 'nämligen', 'förmodligen']),
         };
 
         function analyzeText() {
@@ -204,11 +149,7 @@
                 else if (wordLevels.B2.has(word)) levelCounts.B2++;
             });
 
-            // Calculate complexity metrics
-            const averageSentenceLength = wordCount / sentences.length;
-            const lexicalDiversity = uniqueWords.size / wordCount;
-
-            // Determine CERF level based on multiple factors
+            // Determine CERF level based on word distribution
             let cerfLevel = 'A1';
             const wordPercentages = {
                 A1: (levelCounts.A1 / wordCount) * 100,
@@ -217,16 +158,10 @@
                 B2: (levelCounts.B2 / wordCount) * 100
             };
 
-            // Enhanced level determination algorithm
-            if (wordPercentages.B2 > 5 || (averageSentenceLength > 20 && lexicalDiversity > 0.7)) {
-                cerfLevel = 'C1';
-            } else if (wordPercentages.B1 > 10 || (averageSentenceLength > 15 && lexicalDiversity > 0.6)) {
-                cerfLevel = 'B2';
-            } else if (wordPercentages.A2 > 15 || (averageSentenceLength > 12 && lexicalDiversity > 0.5)) {
-                cerfLevel = 'B1';
-            } else if (wordPercentages.A1 > 20 || (averageSentenceLength > 8 && lexicalDiversity > 0.4)) {
-                cerfLevel = 'A2';
-            }
+            if (wordPercentages.B2 > 5) cerfLevel = 'C1';
+            else if (wordPercentages.B1 > 10) cerfLevel = 'B2';
+            else if (wordPercentages.A2 > 15) cerfLevel = 'B1';
+            else if (wordPercentages.A1 > 20) cerfLevel = 'A2';
 
             // Update UI
             document.getElementById('results').style.display = 'block';
@@ -246,11 +181,6 @@
             const detailedHTML = `
                 <h3>Detailed Analysis</h3>
                 <p>This text appears to be at CERF level ${cerfLevel}.</p>
-                <p>Text Complexity Metrics:</p>
-                <ul>
-                    <li>Average sentence length: ${averageSentenceLength.toFixed(1)} words</li>
-                    <li>Lexical diversity (unique words/total words): ${lexicalDiversity.toFixed(2)}</li>
-                </ul>
                 <p>Word distribution:</p>
                 <ul>
                     <li>A1 words: ${levelCounts.A1} (${wordPercentages.A1.toFixed(1)}%)</li>
